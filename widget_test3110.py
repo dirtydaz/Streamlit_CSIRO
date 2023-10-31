@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from owid import catalog
-from bokeh.plotting import figure
-import matplotlib.pyplot as plt
 import altair as alt
 
 # Generation Graphing
