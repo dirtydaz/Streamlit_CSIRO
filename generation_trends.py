@@ -4,6 +4,7 @@ import numpy as np
 from owid import catalog
 import altair as alt
 
+st.title("Generation Year on Year Changes")
 # Calculate the year-on-year percentage change for each 'Gen' column.
 @st.cache_data
 def get_generation():
@@ -24,14 +25,32 @@ def get_generation():
 
     pct_df = change_df.stack().reset_index()
     pct_df.columns = ['Year', 'Source', 'YoY % Change']
-    return pct_df
+    sources = list(pct_df['Source'].unique())
+    return pct_df, sources
 
-df = get_generation()
+df, sources = get_generation()
 
-chart = alt.Chart(df).mark_line().encode(
+selected_sources = st.multiselect('Generation Sources:', sources, default=sources)
+
+df_final = df[df['Source'].isin(selected_sources)]
+
+# Define a fixed color palette
+color_palette = {
+    'Coal': 'black',
+    'Gas': 'grey',
+    'Solar': '#FFFF00',
+    'Hydro': 'cyan',
+    'Wind': 'green',
+    'Other Fossil': 'red',
+    'Bioenergy': 'orange'
+}
+
+
+chart = alt.Chart(df_final).mark_line().encode(
     x='Year:O',  
     y=alt.Y('YoY % Change:Q', axis=alt.Axis(format='%')),  
-    color='Source:N',  
+    color=alt.Color('Source:N', scale=alt.Scale(domain=[source for source in selected_sources if source in color_palette],
+                                    range=[color_palette[source] for source in selected_sources if source in color_palette])),  
     tooltip=['Year', 'YoY % Change', 'Source']
 ).interactive()
 
