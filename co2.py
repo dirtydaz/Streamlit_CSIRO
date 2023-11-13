@@ -10,8 +10,8 @@ st.title("Greenhouse Gas Emissions")
 @st.cache_data
 def fetch_co2():
     co2 = catalog.find('owid_co2', version = '2023-09-28').load()
-    co2_table = co2[['co2','co2_per_capita','ghg_per_capita','energy_per_capita','energy_per_gdp','gdp','population']]
-    co2_table.columns = ['CO2 Emissions (Mt)', 'CO2 Emissions per Capita (t)', 'GHG Emissions per Capita (CO2 t)', 'Energy Use per Capita (kWh)', 'Energy Use per GDP (kWh per $)', 'GDP (2010 US$)', 'Population (M)']
+    co2_table = co2[['co2','co2_per_capita','ghg_per_capita','energy_per_capita','energy_per_gdp','gdp','population']].copy()
+    co2_table.columns = ['CO2 Emissions (Mt)', 'CO2 Emissions per Capita (t)', 'GHG Emissions per Capita (CO2 t)', 'Energy use per Capita (kWh)', 'Energy Use per GDP (kWh per $)', 'GDP (2010 US$)', 'Population (M)']
     countries_to_remove = ['Africa (GCP)', 'Asia (GCP)','Central America (GCP)',
  'Europe (GCP)','European Union (27) (GCP)','French Equatorial Africa (GCP)','French West Africa (GCP)','Kuwaiti Oil Fires (GCP)','Leeward Islands (GCP)',
  'Middle East (GCP)','Non-OECD (GCP)','North America (GCP)','OECD (GCP)','Oceania (GCP)','Panama Canal Zone (GCP)','Ryukyu Islands (GCP)',
@@ -24,7 +24,7 @@ def fetch_co2():
 co2_table = fetch_co2()
 all_countries = co2_table.reset_index()['country'].unique().to_list()
 countries_list = ['Australia', 'United States', 'United Kingdom', 'China']
-data_options = ['CO2 Emissions (Mt)', 'CO2 Emissions per Capita (t)', 'GHG Emissions per Capita (CO2 t)','Energy Use per Capita (kWh)' ]
+data_options = ['CO2 Emissions (Mt)', 'CO2 Emissions per Capita (t)', 'GHG Emissions per Capita (CO2 t)','Energy use per Capita (kWh)' ]
 
 selected_countries = st.multiselect('Countries or Regions:', all_countries, default=countries_list)
 selected_data = st.selectbox('Data type:', data_options)
@@ -62,7 +62,7 @@ with col1:
     st.write("Global emissions have grown significantly since 1800, sitting at around 37,000 Megatonnes of CO2 in 2022.")
 
 with col2:
-    st.write("Whilst global emissions continue to rise, emissions per capita have begun falling in certain countries.")
+    st.write("Whilst global emissions continue to rise, emissions per capita have begun falling in some countries.")
 
 
 
