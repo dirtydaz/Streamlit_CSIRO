@@ -52,7 +52,7 @@ chart = alt.Chart(co2_unstack).mark_line().encode(
 
 st.altair_chart(chart, use_container_width=True)
 
-import streamlit as st
+
 
 # Create three columns
 col1, col2 = st.columns(2)
